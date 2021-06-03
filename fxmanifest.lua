@@ -31,7 +31,5 @@ client_scripts {
 }
 
 dependencies {
-	'es_extended',
-	'skinchanger',
-	'esx_skin'
+	'es_extended', 'qb-clothing'
 }

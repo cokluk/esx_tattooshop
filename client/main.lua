@@ -9,17 +9,26 @@ Citizen.CreateThread(function()
 	end
 end)
 
-AddEventHandler('skinchanger:modelLoaded', function()
+local eskiSkin = {}
+
+
+AddEventHandler('qb-clothing:client:loadPlayerClothing', function()
+	Wait(5000)
 	ESX.TriggerServerCallback('esx_tattooshop:requestPlayerTattoos', function(tattooList)
 		if tattooList then
 			for k,v in pairs(tattooList) do
 				ApplyPedOverlay(PlayerPedId(), GetHashKey(v.collection), GetHashKey(Config.TattooList[v.collection][v.texture].nameHash))
+
+				print(v.collection)
 			end
 
 			currentTattoos = tattooList
 		end
 	end)
 end)
+
+
+
 
 function OpenShopMenu()
 	local elements = {}
@@ -32,7 +41,30 @@ function OpenShopMenu()
 		RenderScriptCams(false, false, 0, 1, 0)
 		DestroyCam(cam, false)
 	end
+ 
+	local ped = PlayerPedId()
+	eskiSkin.ust = GetPedDrawableVariation(PlayerPedId(), 8)
+	eskiSkin.ust_t = GetPedTextureVariation(PlayerPedId(), 8)
+	eskiSkin.ceket = GetPedDrawableVariation(PlayerPedId(), 11)
+	eskiSkin.ceket_t = GetPedTextureVariation(PlayerPedId(), 11)
+	eskiSkin.pantol = GetPedDrawableVariation(PlayerPedId(), 4)
+	eskiSkin.pantol_t = GetPedTextureVariation(PlayerPedId(), 4)
+	eskiSkin.kol = GetPedDrawableVariation(PlayerPedId(), 5)
+	eskiSkin.kol_t = GetPedTextureVariation(PlayerPedId(), 5)
+ 
 
+	  if IsMpPed(ped) == "Male" then
+		SetPedComponentVariation(ped, 11, 252, 0, 2)
+		SetPedComponentVariation(ped, 4, 18, 7, 2) -- DON
+	  else 
+		SetPedComponentVariation(ped, 11, 74, 0, 2)
+		SetPedComponentVariation(ped, 4, 18, 7, 2) -- DON
+	  end
+	  
+	  SetPedComponentVariation(ped, 8, 15, 2, 2)
+	  SetPedComponentVariation(ped, 3, 15, 0, 2)
+	  SetPedComponentVariation(ped, 10, 0, 0, 2)
+ 
 	ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'tattoo_shop', {
 		title    = _U('tattoos'),
 		align    = 'bottom-right',
@@ -86,7 +118,17 @@ function OpenShopMenu()
 	end, function(data, menu)
 		menu.close()
 		setPedSkin()
+		SetPedComponentVariation(ped, 8, eskiSkin.ust, eskiSkin.ust_t, 2)
+		SetPedComponentVariation(ped, 11, eskiSkin.ceket, eskiSkin.ceket_t, 2)
+		SetPedComponentVariation(ped, 4, eskiSkin.pantol, eskiSkin.pantol_t, 2)
+		SetPedComponentVariation(ped, 5, eskiSkin.kol, eskiSkin.kol_t, 2)
 	end)
+end
+
+function IsMpPed(ped)
+	local Male = GetHashKey("mp_m_freemode_01") local Female = GetHashKey("mp_f_freemode_01")
+	local CurrentModel = GetEntityModel(ped)
+	if CurrentModel == Male then return "Male" elseif CurrentModel == Female then return "Female" else return false end
 end
 
 Citizen.CreateThread(function()
@@ -95,7 +137,6 @@ Citizen.CreateThread(function()
 		SetBlipSprite(blip, 75)
 		SetBlipColour(blip, 1)
 		SetBlipAsShortRange(blip, true)
-
 		BeginTextCommandSetBlipName('STRING')
 		AddTextComponentString(_U('tattoo_shop'))
 		EndTextCommandSetBlipName(blip)
@@ -184,10 +225,7 @@ Citizen.CreateThread(function()
 end)
 
 function setPedSkin()
-	ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
-		TriggerEvent('skinchanger:loadSkin', skin)
-	end)
-
+ 
 	Citizen.Wait(1000)
 
 	for k,v in pairs(currentTattoos) do
@@ -203,31 +241,7 @@ function drawTattoo(current, collection)
 		ApplyPedOverlay(PlayerPedId(), GetHashKey(v.collection), GetHashKey(Config.TattooList[v.collection][v.texture].nameHash))
 	end
 
-	TriggerEvent('skinchanger:getSkin', function(skin)
-		if skin.sex == 0 then
-			TriggerEvent('skinchanger:loadSkin', {
-				sex      = 0,
-				tshirt_1 = 15,
-				tshirt_2 = 0,
-				arms     = 15,
-				torso_1  = 91,
-				torso_2  = 0,
-				pants_1  = 14,
-				pants_2  = 0
-			})
-		else
-			TriggerEvent('skinchanger:loadSkin', {
-				sex      = 1,
-				tshirt_1 = 34,
-				tshirt_2 = 0,
-				arms     = 15,
-				torso_1  = 101,
-				torso_2  = 1,
-				pants_1  = 16,
-				pants_2  = 0
-			})
-		end
-	end)
+ 
 
 	ApplyPedOverlay(PlayerPedId(), GetHashKey(collection), GetHashKey(Config.TattooList[collection][current].nameHash))
 
