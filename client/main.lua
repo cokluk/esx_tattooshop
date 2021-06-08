@@ -43,14 +43,14 @@ function OpenShopMenu()
 	end
  
 	local ped = PlayerPedId()
-	eskiSkin.ust = GetPedDrawableVariation(PlayerPedId(), 8)
-	eskiSkin.ust_t = GetPedTextureVariation(PlayerPedId(), 8)
-	eskiSkin.ceket = GetPedDrawableVariation(PlayerPedId(), 11)
-	eskiSkin.ceket_t = GetPedTextureVariation(PlayerPedId(), 11)
-	eskiSkin.pantol = GetPedDrawableVariation(PlayerPedId(), 4)
-	eskiSkin.pantol_t = GetPedTextureVariation(PlayerPedId(), 4)
-	eskiSkin.kol = GetPedDrawableVariation(PlayerPedId(), 5)
-	eskiSkin.kol_t = GetPedTextureVariation(PlayerPedId(), 5)
+	eskiSkin.ust = GetPedDrawableVariation(ped, 8)
+	eskiSkin.ust_t = GetPedTextureVariation(ped, 8)
+	eskiSkin.ceket = GetPedDrawableVariation(ped, 11)
+	eskiSkin.ceket_t = GetPedTextureVariation(ped, 11)
+	eskiSkin.pantol = GetPedDrawableVariation(ped, 4)
+	eskiSkin.pantol_t = GetPedTextureVariation(ped, 4)
+	eskiSkin.kol = GetPedDrawableVariation(ped, 5)
+	eskiSkin.kol_t = GetPedTextureVariation(ped, 5)
  
 
 	  if IsMpPed(ped) == "Male" then
